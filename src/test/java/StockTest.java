@@ -5,7 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.repository.CrudRepository;
 
 import com.coderevisited.spring.jpa.Stock;
-import com.coderevisited.spring.jpa.StockRepository;
+import com.coderevisited.spring.repository.StockRepository;
 
 
 public class StockTest {

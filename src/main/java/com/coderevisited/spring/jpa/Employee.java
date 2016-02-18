@@ -1,68 +1,161 @@
 package com.coderevisited.spring.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.List;
 
 
+/**
+ * The persistent class for the employees database table.
+ * 
+ */
 @Entity
-@Table(name = "Employee")
-public class Employee {
+@Table(name="employees")
+@NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
+public class Employee implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id")
-    private int id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int employeeNumber;
 
-    @Column(name = "fistName")
-    private String firstName;
+	private String email;
 
-    @Column(name = "lastName")
-    private String lastName;
+	private String extension;
 
-    @Column(name = "dept")
-    private String dept;
+	private String firstName;
 
-    public Employee() {
+	private String jobTitle;
 
-    }
+	private String lastName;
 
-    public Employee(int id, String firstName, String lastName, String dept) {
-        this.setId(id);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setDept(dept);
-    }
+	//bi-directional many-to-one association to Customer
+	@OneToMany(mappedBy="employee")
+	private List<Customer> customers;
 
-    public int getId() {
-        return id;
-    }
+	//bi-directional many-to-one association to Office
+	@ManyToOne
+	@JoinColumn(name="officeCode")
+	private Office office;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	//bi-directional many-to-one association to Employee
+	@ManyToOne
+	@JoinColumn(name="reportsTo")
+	private Employee employee;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	//bi-directional many-to-one association to Employee
+	@OneToMany(mappedBy="employee")
+	private List<Employee> employees;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public Employee() {
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public int getEmployeeNumber() {
+		return this.employeeNumber;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setEmployeeNumber(int employeeNumber) {
+		this.employeeNumber = employeeNumber;
+	}
 
-    public String getDept() {
-        return dept;
-    }
+	public String getEmail() {
+		return this.email;
+	}
 
-    public void setDept(String dept) {
-        this.dept = dept;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getExtension() {
+		return this.extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getJobTitle() {
+		return this.jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public List<Customer> getCustomers() {
+		return this.customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+
+	public Customer addCustomer(Customer customer) {
+		getCustomers().add(customer);
+		customer.setEmployee(this);
+
+		return customer;
+	}
+
+	public Customer removeCustomer(Customer customer) {
+		getCustomers().remove(customer);
+		customer.setEmployee(null);
+
+		return customer;
+	}
+
+	public Office getOffice() {
+		return this.office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
+	}
+
+	public Employee getEmployee() {
+		return this.employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public List<Employee> getEmployees() {
+		return this.employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public Employee addEmployee(Employee employee) {
+		getEmployees().add(employee);
+		employee.setEmployee(this);
+
+		return employee;
+	}
+
+	public Employee removeEmployee(Employee employee) {
+		getEmployees().remove(employee);
+		employee.setEmployee(null);
+
+		return employee;
+	}
+
 }
